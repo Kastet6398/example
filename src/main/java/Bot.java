@@ -2,6 +2,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -24,13 +25,23 @@ public class Bot extends TelegramLongPollingBot {
             if (textFromUser.equals("/weather")) {
                this.sendApiMethod(hermitageInlineKeyboardAb(userId));
             }
-            if (textFromUser.equals("/dnipro")) {
-               this.sendApiMethod(getWeatherInCity(userId, "dnipro"));
+         } catch (TelegramApiException e){
+            log.error(String.valueOf(e));
+         }
+      } else if (update.hasCallbackQuery()) {
+         CallbackQuery callbackQuery = update.getCallbackQuery();
+         String data = callbackQuery.getData();
+         Long userId = update.getCallbackQuery().getMessage().getChatId();
+
+         try {
+            if (data.equals("/dnipro")) {
+               this.sendApiMethod(getWeatherInCity(userId, "днепр"));
             }
          } catch (TelegramApiException e){
             log.error(String.valueOf(e));
          }
-      } else {
+
+      }else {
          log.warn("Unexpected update from user");
       }
    }

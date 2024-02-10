@@ -3,12 +3,13 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class Utils {
    public static String getWeather(String city) {
 
       try {
-         Document doc = Jsoup.connect(STR."https://sinoptik.ua/%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0-\{URLEncoder.encode(city, "UTF-8")}").get();
+         Document doc = Jsoup.connect(STR."https://sinoptik.ua/погода-\{city}-303007131").get();
 
          return doc.select(".today-temp").text();
       } catch (IOException e) {
